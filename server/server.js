@@ -6,11 +6,15 @@ const cors = require("cors");
 
 const app = express();
 
+// ===============================
 // Middleware
+// ===============================
 app.use(cors());
 app.use(express.json());
 
+// ===============================
 // MySQL connection
+// ===============================
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -18,7 +22,9 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+// ===============================
 // Connect to MySQL
+// ===============================
 db.connect((err) => {
   if (err) {
     console.log("Database connection failed:");
@@ -28,19 +34,25 @@ db.connect((err) => {
   }
 });
 
-// Home/test route
+// ===============================
+// Home route
+// ===============================
 app.get("/", (req, res) => {
   res.send("Phone Store Backend is running!");
 });
 
-// Simple test route
+// ===============================
+// Test route
+// ===============================
 app.get("/test", (req, res) => {
   res.json({
     message: "Node is receiving requests!"
   });
 });
 
-// Place order
+// ===============================
+// Place Order
+// ===============================
 app.post("/orders", (req, res) => {
   console.log("=================================");
   console.log("ORDER REQUEST RECEIVED");
@@ -55,14 +67,22 @@ app.post("/orders", (req, res) => {
     total
   } = req.body;
 
-  // Check that all information was received
-  if (!name || !email || !phone || !address || total === undefined) {
+  // Check order information
+  if (
+    !name ||
+    !email ||
+    !phone ||
+    !address ||
+    total === undefined
+  ) {
     return res.status(400).json({
       message: "Some order information is missing"
     });
   }
 
+  // ===============================
   // Save customer
+  // ===============================
   const customerSql = `
     INSERT INTO customers
     (name, email, phone, address)
@@ -87,7 +107,9 @@ app.post("/orders", (req, res) => {
 
       const customerId = customerResult.insertId;
 
+      // ===============================
       // Save order
+      // ===============================
       const orderSql = `
         INSERT INTO orders
         (customer_id, total_amount)
@@ -121,11 +143,17 @@ app.post("/orders", (req, res) => {
   );
 });
 
+// ===============================
 // Start server
+// ===============================
+
+// IMPORTANT:
+// Render gives us its own PORT.
+// Locally, it will use 5000.
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log("---------------------------------");
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on port " + PORT);
   console.log("---------------------------------");
 });
