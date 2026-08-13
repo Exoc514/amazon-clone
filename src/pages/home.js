@@ -1,3 +1,4 @@
+```jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,7 +18,7 @@ function Home() {
         setProducts(data);
       })
       .catch((error) => {
-        console.log("PRODUCT ERROR:", error);
+        console.error("Error loading products:", error);
       });
   }, []);
 
@@ -63,7 +64,6 @@ function Home() {
       <div className="row">
 
         {products.map((item) => (
-
           <div
             className="col-md-3 mb-3"
             key={item.id}
@@ -112,7 +112,6 @@ function Home() {
             </div>
 
           </div>
-
         ))}
 
       </div>
@@ -122,3 +121,4 @@ function Home() {
 }
 
 export default Home;
+```
