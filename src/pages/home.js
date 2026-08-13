@@ -1,4 +1,3 @@
-```javascript
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -6,10 +5,20 @@ function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("/product.json")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.log("Error loading products:", error));
+    fetch("https://amazon-clone-td7b.onrender.com/products")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to load products");
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.log("PRODUCT ERROR:", error);
+      });
   }, []);
 
   const addToCart = (product) => {
@@ -25,7 +34,7 @@ function Home() {
     } else {
       oldCart.push({
         ...product,
-        quantity: 1,
+        quantity: 1
       });
     }
 
@@ -39,6 +48,7 @@ function Home() {
 
   return (
     <div className="container mt-5">
+
       <h2 className="mb-4">
         Amazon Clone Products
       </h2>
@@ -51,15 +61,19 @@ function Home() {
       </Link>
 
       <div className="row">
+
         {products.map((item) => (
+
           <div
             className="col-md-3 mb-3"
             key={item.id}
           >
+
             <div
               className="card"
               style={{ width: "18rem" }}
             >
+
               <img
                 src={item.image}
                 className="card-img-top"
@@ -68,6 +82,7 @@ function Home() {
               />
 
               <div className="card-body">
+
                 <h5>{item.name}</h5>
 
                 <p>{item.price}</p>
@@ -91,14 +106,19 @@ function Home() {
                 >
                   Add to Cart
                 </button>
+
               </div>
+
             </div>
+
           </div>
+
         ))}
+
       </div>
+
     </div>
   );
 }
 
 export default Home;
-```

@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
@@ -56,6 +58,42 @@ app.get("/", (req, res) => {
 app.get("/test", (req, res) => {
   res.json({
     message: "Node is receiving requests!"
+  });
+});
+
+// ===============================
+// Products
+// ===============================
+app.get("/products", (req, res) => {
+  const productFile = path.join(
+    __dirname,
+    "..",
+    "public",
+    "product.json"
+  );
+
+  fs.readFile(productFile, "utf8", (error, data) => {
+    if (error) {
+      console.log("PRODUCT FILE ERROR:");
+      console.log(error);
+
+      return res.status(500).json({
+        message: "Products could not be loaded"
+      });
+    }
+
+    try {
+      const products = JSON.parse(data);
+
+      res.json(products);
+    } catch (parseError) {
+      console.log("PRODUCT JSON ERROR:");
+      console.log(parseError);
+
+      return res.status(500).json({
+        message: "Product data is invalid"
+      });
+    }
   });
 });
 
