@@ -22,10 +22,12 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 
+  // Aiven requires SSL
   ssl: {
     rejectUnauthorized: false
   },
 
+  // Give the database enough time to connect
   connectTimeout: 20000
 });
 
@@ -63,67 +65,53 @@ app.get("/test", (req, res) => {
 app.get("/products", (req, res) => {
   const products = [
     {
-      id: 1,
+      id: "1",
       name: "iPhone 15",
-      price: "₹69999",
-      image: "https://via.placeholder.com/250",
-      features: "Apple iPhone with powerful performance and great camera"
+      price: "₹79,999",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+      features: "128GB Storage, A16 Bionic Chip, 48MP Camera"
     },
     {
-      id: 2,
-      name: "Samsung Galaxy S24",
-      price: "₹64999",
-      image: "https://via.placeholder.com/250",
-      features: "Samsung smartphone with excellent display and camera"
+      id: "2",
+      name: "Laptop",
+      price: "₹55,999",
+      image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+      features: "16GB RAM, 512GB SSD, Intel i5 Processor"
     },
     {
-      id: 3,
-      name: "OnePlus 12",
-      price: "₹59999",
-      image: "https://via.placeholder.com/250",
-      features: "Fast Android phone with powerful processor"
+      id: "3",
+      name: "Headphone",
+      price: "₹2,999",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      features: "Noise Cancellation, Bluetooth 5.0, 20hr Battery"
     },
     {
-      id: 4,
-      name: "HP Laptop",
-      price: "₹54999",
-      image: "https://via.placeholder.com/250",
-      features: "Powerful laptop for work, study and entertainment"
+      id: "4",
+      name: "Smart Watch",
+      price: "₹4,999",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+      features: "Heart Rate Monitor, GPS, Water Resistant"
     },
     {
-      id: 5,
-      name: "Sony Headphones",
-      price: "₹9999",
-      image: "https://via.placeholder.com/250",
-      features: "Wireless headphones with high quality sound"
+      id: "5",
+      name: "LED TV",
+      price: "90,000",
+      image: "https://cdn.gadgetbytenepal.com/wp-content/uploads/2024/12/LED-TV.jpg",
+      features: "LED TV 36 inch, VERY GOOD"
     },
     {
-      id: 6,
-      name: "Samsung Smart TV",
-      price: "₹45999",
-      image: "https://via.placeholder.com/250",
-      features: "4K Smart TV with vivid picture quality"
+      id: "6",
+      name: "AC",
+      price: "25000",
+      image: "https://5.imimg.com/data5/SELLER/Default/2023/11/359514228/XI/OL/XD/3575132/window-air-conditioner-1000x1000.jpg",
+      features: "VERY GOOD AC VOLTAS"
     },
     {
-      id: 7,
-      name: "LG Air Conditioner",
-      price: "₹39999",
-      image: "https://via.placeholder.com/250",
-      features: "Energy efficient air conditioner with powerful cooling"
-    },
-    {
-      id: 8,
-      name: "LG Washing Machine",
-      price: "₹28999",
-      image: "https://via.placeholder.com/250",
-      features: "Fully automatic washing machine with multiple wash modes"
-    },
-    {
-      id: 9,
-      name: "Apple Watch",
-      price: "₹42999",
-      image: "https://via.placeholder.com/250",
-      features: "Smart watch with fitness and health tracking"
+      id: "7",
+      name: "Washing Machine",
+      price: "75000",
+      image: "https://www.lg.com/content/dam/channel/wcms/in/images/wm/fhp1412z9b/gallery/FHP1412Z9B-DZ-06.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+      features: "12Kg frontoad washing machine"
     }
   ];
 
@@ -147,7 +135,9 @@ app.post("/orders", (req, res) => {
     total
   } = req.body;
 
+  // ===============================
   // Check order information
+  // ===============================
   if (
     !name ||
     !email ||
