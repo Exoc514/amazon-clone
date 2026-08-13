@@ -3,8 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
 
 const app = express();
 
@@ -24,12 +22,10 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 
-  // Aiven requires SSL
   ssl: {
     rejectUnauthorized: false
   },
 
-  // Give the database enough time to connect
   connectTimeout: 20000
 });
 
@@ -65,36 +61,73 @@ app.get("/test", (req, res) => {
 // Products
 // ===============================
 app.get("/products", (req, res) => {
-  const productFile = path.join(
-    __dirname,
-    "..",
-    "public",
-    "product.json"
-  );
-
-  fs.readFile(productFile, "utf8", (error, data) => {
-    if (error) {
-      console.log("PRODUCT FILE ERROR:");
-      console.log(error);
-
-      return res.status(500).json({
-        message: "Products could not be loaded"
-      });
+  const products = [
+    {
+      id: 1,
+      name: "iPhone 15",
+      price: "₹69999",
+      image: "https://via.placeholder.com/250",
+      features: "Apple iPhone with powerful performance and great camera"
+    },
+    {
+      id: 2,
+      name: "Samsung Galaxy S24",
+      price: "₹64999",
+      image: "https://via.placeholder.com/250",
+      features: "Samsung smartphone with excellent display and camera"
+    },
+    {
+      id: 3,
+      name: "OnePlus 12",
+      price: "₹59999",
+      image: "https://via.placeholder.com/250",
+      features: "Fast Android phone with powerful processor"
+    },
+    {
+      id: 4,
+      name: "HP Laptop",
+      price: "₹54999",
+      image: "https://via.placeholder.com/250",
+      features: "Powerful laptop for work, study and entertainment"
+    },
+    {
+      id: 5,
+      name: "Sony Headphones",
+      price: "₹9999",
+      image: "https://via.placeholder.com/250",
+      features: "Wireless headphones with high quality sound"
+    },
+    {
+      id: 6,
+      name: "Samsung Smart TV",
+      price: "₹45999",
+      image: "https://via.placeholder.com/250",
+      features: "4K Smart TV with vivid picture quality"
+    },
+    {
+      id: 7,
+      name: "LG Air Conditioner",
+      price: "₹39999",
+      image: "https://via.placeholder.com/250",
+      features: "Energy efficient air conditioner with powerful cooling"
+    },
+    {
+      id: 8,
+      name: "LG Washing Machine",
+      price: "₹28999",
+      image: "https://via.placeholder.com/250",
+      features: "Fully automatic washing machine with multiple wash modes"
+    },
+    {
+      id: 9,
+      name: "Apple Watch",
+      price: "₹42999",
+      image: "https://via.placeholder.com/250",
+      features: "Smart watch with fitness and health tracking"
     }
+  ];
 
-    try {
-      const products = JSON.parse(data);
-
-      res.json(products);
-    } catch (parseError) {
-      console.log("PRODUCT JSON ERROR:");
-      console.log(parseError);
-
-      return res.status(500).json({
-        message: "Product data is invalid"
-      });
-    }
-  });
+  res.json(products);
 });
 
 // ===============================
