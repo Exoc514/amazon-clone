@@ -1,0 +1,53 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 15",
+      "price": "₹79,999",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+      "features": "128GB Storage, A16 Bionic Chip, 48MP Camera"
+    },
+    {
+      "id": 2,
+      "name": "Laptop",
+      "price": "₹55,999",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+      "features": "16GB RAM, 512GB SSD, Intel i5 Processor"
+    },
+    {
+      "id": 3,
+      "name": "Headphone",
+      "price": "₹2,999",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      "features": "Noise Cancellation, Bluetooth 5.0, 20hr Battery"
+    },
+    {
+      "id": 4,
+      "name": "Smart Watch",
+      "price": "₹4,999",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+      "features": "Heart Rate Monitor, GPS, Water Resistant"
+    },
+    {
+      "id": 4,
+    "name": "LED TV",
+    "price":"90,000",
+    "image": "https://cdn.gadgetbytenepal.com/wp-content/uploads/2024/12/LED-TV.jpg",
+    "features": "LED TV 36 inch, VERY GOOD"
+    },
+    {
+      "id":5,
+      "name":"AC",
+      "price":"25000",
+      "image":"https://5.imimg.com/data5/SELLER/Default/2023/11/359514228/XI/OL/XD/3575132/window-air-conditioner-1000x1000.jpg",
+      "features":"VERY GOOD AC VOLTAS"
+    },
+    {
+      "id":6,
+      "name":"Washing Machine",
+      "price":"75000",
+      "image":"https://www.lg.com/content/dam/channel/wcms/in/images/wm/fhp1412z9b/gallery/FHP1412Z9B-DZ-06.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+      "features":"12Kg frontoad washing machine"
+    }
+  ]
+}
