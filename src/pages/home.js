@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -12,6 +13,7 @@ function Home() {
         if (!res.ok) {
           throw new Error("Failed to load products");
         }
+
         return res.json();
       })
       .then((data) => {
@@ -41,22 +43,19 @@ function Home() {
     if (existingProduct) {
       existingProduct.quantity =
         (existingProduct.quantity || 1) + 1;
-
-      localStorage.setItem(
-        "cart",
-        JSON.stringify(oldCart)
-      );
     } else {
       const newProduct = {
         ...product,
         quantity: 1
       };
 
-      localStorage.setItem(
-        "cart",
-        JSON.stringify([...oldCart, newProduct])
-      );
+      oldCart.push(newProduct);
     }
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(oldCart)
+    );
 
     alert(product.name + " added to cart!");
   };
@@ -79,9 +78,20 @@ function Home() {
 
   return (
     <div className="container mt-5">
-      <h1>Amazon Clone</h1>
+
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Amazon Clone</h1>
+
+        <Link
+          to="/cart"
+          className="btn btn-warning"
+        >
+          🛒 View Cart
+        </Link>
+      </div>
 
       <div className="row mt-4">
+
         {products.map((product) => (
           <div
             className="col-md-4 mb-4"
@@ -100,6 +110,7 @@ function Home() {
               />
 
               <div className="card-body">
+
                 <h3>{product.name}</h3>
 
                 <h4>{product.price}</h4>
@@ -119,11 +130,13 @@ function Home() {
                 >
                   Add to Cart
                 </button>
+
               </div>
 
             </div>
           </div>
         ))}
+
       </div>
     </div>
   );
