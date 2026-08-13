@@ -1,4 +1,4 @@
-```jsx
+
 import React, { useEffect, useState } from "react";
 
 function Home() {
@@ -31,33 +31,34 @@ function Home() {
   };
 
   const addToCart = (product) => {
-    const oldCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const oldCart =
+      JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingProduct = oldCart.find(
       (item) => item.id === product.id
     );
 
-    let newCart;
-
     if (existingProduct) {
-      newCart = oldCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: (item.quantity || 1) + 1 }
-          : item
+      existingProduct.quantity =
+        (existingProduct.quantity || 1) + 1;
+
+      localStorage.setItem(
+        "cart",
+        JSON.stringify(oldCart)
       );
     } else {
-      newCart = [
-        ...oldCart,
-        {
-          ...product,
-          quantity: 1
-        }
-      ];
+      const newProduct = {
+        ...product,
+        quantity: 1
+      };
+
+      localStorage.setItem(
+        "cart",
+        JSON.stringify([...oldCart, newProduct])
+      );
     }
 
-    localStorage.setItem("cart", JSON.stringify(newCart));
-
-    alert(`${product.name} added to cart!`);
+    alert(product.name + " added to cart!");
   };
 
   if (loading) {
@@ -78,14 +79,14 @@ function Home() {
 
   return (
     <div className="container mt-5">
-
       <h1>Amazon Clone</h1>
 
       <div className="row mt-4">
-
         {products.map((product) => (
-          <div className="col-md-4 mb-4" key={product.id}>
-
+          <div
+            className="col-md-4 mb-4"
+            key={product.id}
+          >
             <div className="card p-3 h-100">
 
               <img
@@ -99,7 +100,6 @@ function Home() {
               />
 
               <div className="card-body">
-
                 <h3>{product.name}</h3>
 
                 <h4>{product.price}</h4>
@@ -119,19 +119,15 @@ function Home() {
                 >
                   Add to Cart
                 </button>
-
               </div>
 
             </div>
-
           </div>
         ))}
-
       </div>
-
     </div>
   );
 }
 
 export default Home;
-```
+
