@@ -17,9 +17,18 @@ app.use(express.json());
 // ===============================
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+
+  // Aiven requires SSL
+  ssl: {
+    rejectUnauthorized: false
+  },
+
+  // Give the database enough time to connect
+  connectTimeout: 20000
 });
 
 // ===============================
@@ -146,13 +155,9 @@ app.post("/orders", (req, res) => {
 // ===============================
 // Start server
 // ===============================
-
-// IMPORTANT:
-// Render gives us its own PORT.
-// Locally, it will use 5000.
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("---------------------------------");
   console.log("Server running on port " + PORT);
   console.log("---------------------------------");
