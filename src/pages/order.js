@@ -21,7 +21,7 @@ function Order() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:5000/orders",
+        "https://amazon-clone-td7b.onrender.com/orders",
         {
           method: "POST",
           headers: {
@@ -47,6 +47,12 @@ function Order() {
 
         // Clear cart after successful order
         localStorage.removeItem("cart");
+
+        // Clear the form
+        setName("");
+        setEmail("");
+        setPhone("");
+        setAddress("");
       } else {
         alert(
           "Something went wrong: " +
@@ -82,7 +88,6 @@ function Order() {
           />
         </div>
 
-
         <div className="mb-3">
           <label>Email</label>
 
@@ -94,7 +99,6 @@ function Order() {
             required
           />
         </div>
-
 
         <div className="mb-3">
           <label>Phone</label>
@@ -108,7 +112,6 @@ function Order() {
           />
         </div>
 
-
         <div className="mb-3">
           <label>Address</label>
 
@@ -120,11 +123,9 @@ function Order() {
           />
         </div>
 
-
         <h4>
           Total: ₹{total.toLocaleString()}
         </h4>
-
 
         <button
           type="submit"
