@@ -1,9 +1,9 @@
-```jsx
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("https://amazon-clone-td7b.onrender.com/products")
@@ -11,114 +11,80 @@ function Home() {
         if (!res.ok) {
           throw new Error("Failed to load products");
         }
-
         return res.json();
       })
       .then((data) => {
         setProducts(data);
+        setLoading(false);
       })
-      .catch((error) => {
-        console.error("Error loading products:", error);
+      .catch((err) => {
+        console.log(err);
+        setError("Could not load products");
+        setLoading(false);
       });
   }, []);
 
-  const addToCart = (product) => {
-    const oldCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
-
-    const existingProduct = oldCart.find(
-      (item) => item.id === product.id
-    );
-
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      oldCart.push({
-        ...product,
-        quantity: 1
-      });
-    }
-
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(oldCart)
-    );
-
-    alert(product.name + " added to cart!");
+  const openProduct = (product) => {
+    localStorage.setItem("product", JSON.stringify(product));
+    window.location.href = "/product";
   };
+
+  if (loading) {
+    return (
+      <div className="container mt-5">
+        <h2>Loading products...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <h2>{error}</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-5">
+      <h1>Amazon Clone</h1>
 
-      <h2 className="mb-4">
-        Amazon Clone Products
-      </h2>
-
-      <Link
-        to="/cart"
-        className="btn btn-dark mb-4"
-      >
-        🛒 View Cart
-      </Link>
-
-      <div className="row">
-
-        {products.map((item) => (
-          <div
-            className="col-md-3 mb-3"
-            key={item.id}
-          >
-
-            <div
-              className="card"
-              style={{ width: "18rem" }}
-            >
+      <div className="row mt-4">
+        {products.map((product) => (
+          <div className="col-md-4 mb-4" key={product.id}>
+            <div className="card p-3 h-100">
 
               <img
-                src={item.image}
+                src={product.image}
+                alt={product.name}
                 className="card-img-top"
-                alt={item.name}
-                height="200"
+                style={{
+                  height: "250px",
+                  objectFit: "contain"
+                }}
               />
 
               <div className="card-body">
+                <h3>{product.name}</h3>
 
-                <h5>{item.name}</h5>
+                <h4>{product.price}</h4>
 
-                <p>{item.price}</p>
-
-                <Link
-                  to="/product"
-                  onClick={() =>
-                    localStorage.setItem(
-                      "product",
-                      JSON.stringify(item)
-                    )
-                  }
-                  className="btn btn-primary me-2"
-                >
-                  View Product
-                </Link>
+                <p>{product.features}</p>
 
                 <button
-                  className="btn btn-success mt-2"
-                  onClick={() => addToCart(item)}
+                  className="btn btn-primary"
+                  onClick={() => openProduct(product)}
                 >
-                  Add to Cart
+                  View Product
                 </button>
-
               </div>
 
             </div>
-
           </div>
         ))}
-
       </div>
-
     </div>
   );
 }
 
 export default Home;
-```
