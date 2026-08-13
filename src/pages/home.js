@@ -1,3 +1,4 @@
+```javascript
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -5,13 +6,19 @@ function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/products")
+    fetch("/product.json")
       .then((res) => res.json())
-      .then((data) => setProducts(data));
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.log("Error loading products:", error);
+      });
   }, []);
 
   const addToCart = (product) => {
-    const oldCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const oldCart =
+      JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingProduct = oldCart.find(
       (item) => item.id === product.id
@@ -26,22 +33,41 @@ function Home() {
       });
     }
 
-    localStorage.setItem("cart", JSON.stringify(oldCart));
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(oldCart)
+    );
 
     alert(product.name + " added to cart!");
   };
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Amazon Clone Products</h2>
-      <Link to="/cart" className="btn btn-dark mb-4">
-  🛒 View Cart
-</Link>
-      <div className="row">
-        {products.map((item) => (
-          <div className="col-md-3 mb-3" key={item.id}>
 
-            <div className="card" style={{ width: "18rem" }}>
+      <h2 className="mb-4">
+        Amazon Clone Products
+      </h2>
+
+      <Link
+        to="/cart"
+        className="btn btn-dark mb-4"
+      >
+        🛒 View Cart
+      </Link>
+
+      <div className="row">
+
+        {products.map((item) => (
+
+          <div
+            className="col-md-3 mb-3"
+            key={item.id}
+          >
+
+            <div
+              className="card"
+              style={{ width: "18rem" }}
+            >
 
               <img
                 src={item.image}
@@ -51,6 +77,7 @@ function Home() {
               />
 
               <div className="card-body">
+
                 <h5>{item.name}</h5>
 
                 <p>{item.price}</p>
@@ -74,15 +101,20 @@ function Home() {
                 >
                   Add to Cart
                 </button>
+
               </div>
 
             </div>
 
           </div>
+
         ))}
+
       </div>
+
     </div>
   );
 }
 
 export default Home;
+```
