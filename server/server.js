@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 
 const express = require("express");
@@ -132,7 +133,9 @@ app.post("/orders", (req, res) => {
     email,
     phone,
     address,
-    total
+    total,
+    items,
+    cart
   } = req.body;
 
   // ===============================
@@ -149,6 +152,10 @@ app.post("/orders", (req, res) => {
       message: "Some order information is missing"
     });
   }
+
+  // Use items if frontend sends "items"
+  // Otherwise use "cart"
+  const orderItems = items || cart || [];
 
   // ===============================
   // Save customer
@@ -203,10 +210,64 @@ app.post("/orders", (req, res) => {
           console.log("Order saved successfully!");
           console.log("Order ID:", orderResult.insertId);
 
-          res.json({
-            message: "Order saved successfully",
-            orderId: orderResult.insertId
+          const orderId = orderResult.insertId;
+
+          // ===============================
+          // Save ordered products
+          // ===============================
+
+          if (!Array.isArray(orderItems) || orderItems.length === 0) {
+            return res.json({
+              message: "Order saved successfully",
+              orderId: orderId
+            });
+          }
+
+          const itemSql = `
+            INSERT INTO order_items
+            (order_id, product_id, product_name, price, quantity)
+            VALUES ?
+          `;
+
+          const itemValues = orderItems.map((item) => {
+
+            const cleanPrice = Number(
+              String(item.price)
+                .replace("₹", "")
+                .replace(/,/g, "")
+            );
+
+            return [
+              orderId,
+              String(item.id),
+              item.name,
+              cleanPrice,
+              item.quantity || 1
+            ];
           });
+
+          db.query(
+            itemSql,
+            [itemValues],
+            (itemError) => {
+
+              if (itemError) {
+                console.log("ORDER ITEMS DATABASE ERROR:");
+                console.log(itemError);
+
+                return res.status(500).json({
+                  message: "Order saved but products could not be saved"
+                });
+              }
+
+              console.log("Order products saved successfully!");
+
+              res.json({
+                message: "Order saved successfully",
+                orderId: orderId
+              });
+            }
+          );
         }
       );
     }

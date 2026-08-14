@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 function Order() {
@@ -32,7 +33,10 @@ function Order() {
             email: email,
             phone: phone,
             address: address,
-            total: total
+            total: total,
+
+            // SEND CART PRODUCTS TO SERVER
+            items: cart
           })
         }
       );
@@ -42,7 +46,7 @@ function Order() {
       if (response.ok) {
         alert(
           "Order placed successfully! Order ID: " +
-          data.orderId
+            data.orderId
         );
 
         // Clear cart after successful order
@@ -56,10 +60,9 @@ function Order() {
       } else {
         alert(
           "Something went wrong: " +
-          data.message
+            data.message
         );
       }
-
     } catch (error) {
       console.log("ERROR:", error);
       alert("Could not connect to the server.");
@@ -141,3 +144,4 @@ function Order() {
 }
 
 export default Order;
+
